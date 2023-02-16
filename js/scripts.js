@@ -17,12 +17,12 @@ AddressBook.prototype.addContact = function(contact) {
 
 // Business Logic for Contacts
 
-function Contact(firstName, lastName, phoneNumber, eMail, homeAddress) {
+function Contact(firstName, lastName, phoneNumber, email, address) {
   this.firstName = firstName;
   this.lastName = lastName;
   this.phoneNumber = phoneNumber;
-  this.eMail = eMail;
-  this.homeAddress = homeAddress;
+  this.email = email;
+  this.address = address;
 }
 
 Contact.prototype.fullName = function() {
@@ -35,8 +35,6 @@ AddressBook.prototype.findContact = function(id) {
   }
   return false;
 };
-
-
 
 AddressBook.prototype.deleteContact = function(id) {
   if (this.contacts[id] === undefined) {
@@ -62,6 +60,16 @@ function listContacts(addressBookToDisplay) {
   contactsDiv.append(ul);
 }
 
+function displayContactDetails(event) {
+  const contact = addressBook.findContact(event.target.id);
+  document.querySelector(".first-name").innerText = contact.firstName;
+  document.querySelector(".last-name").innerText = contact.lastName;
+  document.querySelector(".phone-number").innerText = contact.phoneNumber;
+  document.querySelector(".email").innerText = contact.email;
+  document.querySelector(".address").innerText = contact.address;
+  document.querySelector(".div#contact-details").removeAttribute("class");
+}
+
 function handleFormSubmission(event) {
   event.preventDefault();
   const inputtedFirstName = document.querySelector("input#new-first-name").value;
@@ -69,17 +77,13 @@ function handleFormSubmission(event) {
   const inputtedPhoneNumber = document.querySelector("input#new-phone-number").value;
   const inputtedEmail = document.querySelector("input#new-email").value;
   const inputtedAddress = document.querySelector("input#new-address").value;
-
   let newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmail, inputtedAddress);
   addressBook.addContact(newContact);
   listContacts(addressBook); 
   document.getElementById("contact-details").removeAttribute("class");
-
 }
 
-
-
-
-window.addEventListener("load", function (){
+window.addEventListener("load", function () {
   document.querySelector("form#new-contact").addEventListener("submit", handleFormSubmission);
+  document.querySelector("div#contacts").addEventListener("click", displayContactDetails);   
 });
